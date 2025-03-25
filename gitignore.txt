@@ -1,0 +1,38 @@
+# Visual Studio Code
+.vscode/
+
+# Keil project
+/Objects/
+/Listings/
+*.uvgui.*
+**.workspace
+*.scvd
+ *.bak
+*.ddk
+*.edk
+*.lst
+*.lnp
+*.mpf
+*.mpj
+*.obj
+*.omf
+*.plg
+*.rpt
+*.uvgui.*
+*.tmp
+*.__i
+*.crf
+*.o
+*.d
+*.axf
+*.uvgui
+*.uvgui*
+*.bak
+*.tra
+*.dep
+JLinkLog.txt
+*.iex
+*.htm
+*.sct
+*.map
+*.dep
