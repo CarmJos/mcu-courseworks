@@ -2,8 +2,8 @@
 .vscode/
 
 # Keil project
-/Objects/
-/Listings/
+/.out/
+/.listings/
 *.uvgui.*
 **.workspace
 *.scvd

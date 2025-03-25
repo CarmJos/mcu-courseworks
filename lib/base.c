@@ -1,6 +1,10 @@
 #include "base.h"
 
 void delay(unsigned int i) {
-    unsigned char t;
-    while (i--)  for (t = 0;t < 120;t++);
+    unsigned int j;
+    for (; i > 0; i--) {
+        for (j = 0; j < 125; j++) {
+            _nop_();
+        }
+    }
 }

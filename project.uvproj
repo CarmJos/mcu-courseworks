@@ -52,7 +52,7 @@
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Listings\</ListingPath>
+          <ListingPath>.\.out\listings\</ListingPath>
           <HexFormatSelection>0</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\lib</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -374,24 +374,53 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>led-control</GroupName>
+          <GroupName>LIB</GroupName>
           <Files>
+            <File>
+              <FileName>base.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\base.c</FilePath>
+            </File>
+            <File>
+              <FileName>base.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lib\base.h</FilePath>
+            </File>
+            <File>
+              <FileName>hex_display.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lib\hex_display.h</FilePath>
+            </File>
+            <File>
+              <FileName>led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lib\led.h</FilePath>
+            </File>
             <File>
               <FileName>STARTUP.A51</FileName>
               <FileType>2</FileType>
               <FilePath>.\lib\STARTUP.A51</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>P1</GroupName>
+          <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\lib\delay.h</FilePath>
+              <FilePath>.\src\p1\main.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>P2</GroupName>
+        </Group>
+        <Group>
+          <GroupName>P3</GroupName>
+        </Group>
+        <Group>
+          <GroupName>P4</GroupName>
         </Group>
       </Groups>
     </Target>

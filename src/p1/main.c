@@ -1,5 +1,3 @@
-#include <reg51.h>
-#include <intrins.h>
 #include "base.h"
 
 void alternately(){
