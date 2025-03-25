@@ -31,6 +31,7 @@ del *.htm /s
 del *.sct /s
 del *.map /s
 
+rmdir out /s /q
 rmdir Objects /s /q
 rmdir Listings /s /q
 

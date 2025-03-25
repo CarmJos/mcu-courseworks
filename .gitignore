@@ -1,10 +1,9 @@
 # Visual Studio Code
-.vscode/
+**/.vscode/
 
 # Keil project
-/.out/
-/.listings/
-*.uvgui.*
+**/.out/
+**/*.uvgui.*
 **.workspace
 *.scvd
  *.bak
@@ -18,7 +17,6 @@
 *.omf
 *.plg
 *.rpt
-*.uvgui.*
 *.tmp
 *.__i
 *.crf
