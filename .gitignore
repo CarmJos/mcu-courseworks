@@ -4,7 +4,6 @@
 # Keil project
 **/.out/
 **/*.uvgui.*
-**.workspace
 *.scvd
  *.bak
 *.ddk
@@ -34,3 +33,7 @@ JLinkLog.txt
 *.sct
 *.map
 *.dep
+
+# Protus project
+**/*.pdsbak
+**/**.workspace
