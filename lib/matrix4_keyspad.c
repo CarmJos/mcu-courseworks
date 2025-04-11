@@ -1,29 +1,47 @@
 #include "base.h"
 
-#define KEYS_DEBOUNCE_DELAY 10 // Debounce delay in milliseconds
+#define KEYS_DEBOUNCE_DELAY 50 // Debounce delay in milliseconds
 
-#define KEYS_COLUMN_MASK 0x0F // Mask for the column bits
-#define KEYS_ROW_MASK 0xF0 // Mask for the row bits
+uint16 keypad4_parallel_read(uchar(*port_get)(void), void(*port_set)(uchar)) {
+    uchar row, col, keys;
+    uint16 state = 0x0000;
 
-uint16 keypad4_read(uchar(*port_get)(void), uchar(*port_set)(uchar)) {
-    static row, col;
-    uint16 state = 0x0000; // Initialize state to 0
+    for (col = 0; col < 4; col++) {
+        port_set(~(1 << col)); // Set one column low at a time
+        delay(KEYS_DEBOUNCE_DELAY); // Debounce delay
 
-    port_set(0xF0); // Set all rows to high (inactive state)
-    if (port_get() & 0xF0 == 0xF0) return 0; // If no key is pressed, return 0
-
-    for (row = 0; row < 4; row++) {
-        port_set(0xF0 | (1 << row)); // Set the current row to low (active state)
-        delay(KEYS_DEBOUNCE_DELAY); // Wait for debounce
-
-        col = port_get() & KEYS_COLUMN_MASK; // Read the column state
-        if (col != 0x0F) { // If a key is pressed in this row
-            state |= (col << (row * 4)); // Update the state with the pressed key
-            delay(KEYS_DEBOUNCE_DELAY); // Wait for debounce
-            while ((port_get() & KEYS_COLUMN_MASK) != 0x0F); // Wait until the key is released
+        keys = port_get() & 0xF0; // Read the row states (high nibble)
+        for (row = 0; row < 4; row++) {
+            if (!(keys & (1 << (4 + row)))) { // Check if the key is pressed
+                state |= (1 << (row * 4 + col)); // Update the state
+            }
         }
     }
 
-    return state; // Return the state of the keys pressed
 
+    return state; // Return the state of the keys pressed
+}
+
+uint16 keypad4_transpose_read(uchar(*port_get)(void), void(*port_set)(uchar)) {
+    uint16 state = 0x0000;
+    uchar i, scan1, scan2, keys;
+
+    port_set(0xF0);
+    scan1 = port_get();
+    if (scan1 == 0xF0) return 0;
+
+    scan1 = port_get();
+    if (scan1 == 0xF0) return 0;
+
+    port_set(0x0F);
+    scan2 = port_get();
+
+    for (i = 0; i < 4; i++) {
+        if (!(scan1 & (1 << (4 + i)))) {
+            keys = (~scan2) & 0x0F;
+            state |= (keys << (i * 4));
+        }
+    }
+
+    return state;
 }
