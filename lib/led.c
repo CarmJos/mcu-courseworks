@@ -4,14 +4,14 @@ void led_reset(void) {
     led_set(0x00);
 }
 
-void led_stream(const bool reverse, const  int ticks) {
+void led_stream(const bool reverse, const int period) {
     uchar i;
     uchar led = reverse ? 0x01 : 0x80;
     uchar(*p)(int x, int  y) = reverse ? _crol_ : _cror_;
     for (i = 0; i < 8; i++) {
         led_set(led);
         led = p(led, 1);
-        delay(ticks);
+        delay(period);
     }
     led_reset();
 }
