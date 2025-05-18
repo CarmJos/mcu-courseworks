@@ -1,7 +1,8 @@
 # MCU Courseworks
 
-This repository contains coursework projects related to microcontroller (MCU) programming and embedded systems.
+<img src=".doc/images/book.png" width="250px" alt="book" align="right" style="float: right"/>
 
+This repository contains coursework projects related to microcontroller (MCU) programming and embedded systems.
 
 Any questions or suggestions are welcome to contact me 
 via email [**carm@carm.cc**](mailto:carm@carm.cc) or [issues](https://github.com/CarmJos/mcu-courseworks/issues/new) .
