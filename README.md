@@ -1,8 +1,10 @@
 # MCU Courseworks
 
-<img src=".doc/images/book.png" width="250px" alt="book" align="right" style="float: right"/>
+<img src=".doc/images/book.png" width="180px" alt="book" align="right" style="float: right"/>
 
-This repository contains coursework projects related to microcontroller (MCU) programming and embedded systems.
+This repository contains coursework projects related to microcontroller (MCU) programming 
+and embedded systems when learning following courses:
+- "**Principles and Application Design of Microcontrollers**" 3rd Edition (by _Yigang_ / _Electronic Industry Press_)
 
 Any questions or suggestions are welcome to contact me 
 via email [**carm@carm.cc**](mailto:carm@carm.cc) or [issues](https://github.com/CarmJos/mcu-courseworks/issues/new) .
