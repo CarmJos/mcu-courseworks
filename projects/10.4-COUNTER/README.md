@@ -8,6 +8,9 @@
 
 ## 硬件电路设计
 
+![BEEL](beel.png)
+
+![PAD](pad.png)
 
 ## 程序设计
 

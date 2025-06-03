@@ -7,6 +7,10 @@
 
 ## 硬件电路设计
 
+![PAD](pad.png)
+
+![HEX_DISPLAY](wire.png)
+
 
 ## 程序设计
 
