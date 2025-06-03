@@ -13,6 +13,18 @@ typedef enum {
 
 ClockMode mode = DISPLAY; // 时钟模式，初始为显示模式
 
+typedef enum {
+    SET_SECOND,  // 设置秒
+    SET_MINUTE,  // 设置分
+    SET_HOUR,    // 设置时
+    SET_ALARM_SECOND, // 设置闹钟秒
+    SET_ALARM_MINUTE, // 设置闹钟分
+    SET_ALARM_HOUR,   // 设置闹钟时
+    SET_ALARM_ENABLE  // 设置闹钟开关
+} SettingMode;
+
+SettingMode setting_mode = SET_SECOND; // 当前设置的位置
+
 char separator = ':'; // 时间分隔符
 int hour, minute, second = 0; // 时分秒
 
@@ -60,23 +72,131 @@ int main() {
 
         switch (mode) {
         case TIME_SETTING:
+            sprintf(line1, "    %02d%c%02d%c%02d    ", hour, separator, minute, separator, second);
+            memset(line2, ' ', 16);
+            
+            // 根据当前设置位置显示指示符
+            if (setting_mode == SET_HOUR) {
+                line2[4] = '^';
+                line2[5] = '^';
+            } else if (setting_mode == SET_MINUTE) {
+                line2[7] = '^';
+                line2[8] = '^';
+            } else if (setting_mode == SET_SECOND) {
+                line2[10] = '^';
+                line2[11] = '^';
+            }
+            
+            // 处理按键
+            if (pressed(0, 1)) { // 切换设置位置
+                setting_mode++;
+                if (setting_mode > SET_HOUR) {
+                    setting_mode = SET_SECOND;
+                }
+            } else if (pressed(0, 2)) { // 增加值
+                switch (setting_mode) {
+                    case SET_SECOND:
+                        second = (second + 1) % 60;
+                        break;
+                    case SET_MINUTE:
+                        minute = (minute + 1) % 60;
+                        break;
+                    case SET_HOUR:
+                        hour = (hour + 1) % 24;
+                        break;
+                }
+            } else if (pressed(0, 3)) { // 减少值
+                switch (setting_mode) {
+                    case SET_SECOND:
+                        second = (second + 59) % 60;
+                        break;
+                    case SET_MINUTE:
+                        minute = (minute + 59) % 60;
+                        break;
+                    case SET_HOUR:
+                        hour = (hour + 23) % 24;
+                        break;
+                }
+            } else if (pressed(0, 0)) { // 进入闹钟设置模式
+                mode = ALARM_SETTING;
+                setting_mode = SET_ALARM_SECOND;
+            }
             break;
+            
         case ALARM_SETTING:
+            sprintf(line1, "AL: %02d%c%02d%c%02d %c", alarm_hour, separator, alarm_minute, separator, alarm_second, alarm_enabled ? 'Y' : 'N');
+            memset(line2, ' ', 16);
+            
+            // 根据当前设置位置显示指示符
+            if (setting_mode == SET_ALARM_HOUR) {
+                line2[4] = '^';
+                line2[5] = '^';
+            } else if (setting_mode == SET_ALARM_MINUTE) {
+                line2[7] = '^';
+                line2[8] = '^';
+            } else if (setting_mode == SET_ALARM_SECOND) {
+                line2[10] = '^';
+                line2[11] = '^';
+            } else if (setting_mode == SET_ALARM_ENABLE) {
+                line2[13] = '^';
+            }
+            
+            // 处理按键
+            if (pressed(0, 1)) { // 切换设置位置
+                setting_mode++;
+                if (setting_mode > SET_ALARM_ENABLE) {
+                    setting_mode = SET_ALARM_SECOND;
+                }
+            } else if (pressed(0, 2)) { // 增加值
+                switch (setting_mode) {
+                    case SET_ALARM_SECOND:
+                        alarm_second = (alarm_second + 1) % 60;
+                        break;
+                    case SET_ALARM_MINUTE:
+                        alarm_minute = (alarm_minute + 1) % 60;
+                        break;
+                    case SET_ALARM_HOUR:
+                        alarm_hour = (alarm_hour + 1) % 24;
+                        break;
+                    case SET_ALARM_ENABLE:
+                        alarm_enabled = !alarm_enabled;
+                        break;
+                }
+            } else if (pressed(0, 3)) { // 减少值
+                switch (setting_mode) {
+                    case SET_ALARM_SECOND:
+                        alarm_second = (alarm_second + 59) % 60;
+                        break;
+                    case SET_ALARM_MINUTE:
+                        alarm_minute = (alarm_minute + 59) % 60;
+                        break;
+                    case SET_ALARM_HOUR:
+                        alarm_hour = (alarm_hour + 23) % 24;
+                        break;
+                    case SET_ALARM_ENABLE:
+                        alarm_enabled = !alarm_enabled;
+                        break;
+                }
+            } else if (pressed(0, 0)) { // 返回显示模式
+                mode = DISPLAY;
+                setting_mode = SET_SECOND;
+            }
             break;
+            
         default:
             sprintf(line1, "    %02d%c%02d%c%02d   %c", hour, separator, minute, separator, second, (alarm_enabled ? 'A' : 'X'));
 
             if (pressed(0, 1)) {
                 alarm = 0; // 按下按键0,1，清除闹钟
             } else if (pressed(0, 0)) {
-                // 进入设置模式
-
+                mode = TIME_SETTING; // 进入时间设置模式
+                setting_mode = SET_SECOND;
             }
             break;
         }
 
         LCD1602_display(0, 0, line1);
-        LCD1602_display(0, 0, line2);
+        LCD1602_display(1, 0, line2);
     }
 
 }
