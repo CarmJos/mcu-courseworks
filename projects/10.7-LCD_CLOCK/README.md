@@ -10,6 +10,10 @@
 
 ## 硬件电路设计
 
+![LCD](lcd1602.png)
+
+![btn](buttons.png)
+
 
 ## 程序设计
 
