@@ -6,11 +6,12 @@
 sbit BEEP = P2 ^ 3; // 蜂鸣器控制引脚
 
 typedef enum {
-    DISPLAY,
-    TIME_SETTING,
-    ALARM_SETTING,
-    ALARM_ENABLE
+    DISPLAY, // 显示模式
+    TIME_SETTING, // 时间设置模式
+    ALARM_SETTING // 闹钟设置模式
 } ClockMode;
+
+ClockMode mode = DISPLAY; // 时钟模式，初始为显示模式
 
 char separator = ':'; // 时间分隔符
 int hour, minute, second = 0; // 时分秒
@@ -20,48 +21,62 @@ int alarm_hour, alarm_minute, alarm_second = 0; // 闹钟时分秒
 
 uchar alarm = 0; // 闹钟剩余次数，为0时表示闹钟无效
 
-bool setting = FALSE; // 设置状态
+uint16 input; // 按键输入
 
-uchar pad_read() { return P3; }
+uint16 read_keys();
 
-void pad_write(uchar val) { P3 = val; }
-
-char* get_time() {
-    static char time_str[16]; // 格式为 "HH:MM:SS"，分隔符可能是空格或冒号
-    sprintf(time_str, "%02d%c%02d%c%02d", hour, separator, minute, separator, second);
-    return time_str;
+inline bool pressed(uchar x, uchar y) {
+    return (input & (1 << (x * 4 + y))) != 0;
 }
 
 int main() {
-    static uint16 input;
     static char line1[16]; // 用于显示的字符串
+    static char line2[16]; // 用于显示的字符串
 
-    TMOD = 0x22;
+    { // 初始化中断
+        TMOD = 0x22;
 
-    TH0 = 0x06;
-    TL0 = 0x06;
-    TH1 = 0x06;
-    TL1 = 0x06;
+        TH0 = 0x06;
+        TL0 = 0x06;
+        TH1 = 0x06;
+        TL1 = 0x06;
 
-    TR0 = 1;
-    ET0 = 1;
-    TR1 = 1;
-    ET1 = 1;
-    EA = 1; // 允许总中断
+        TR0 = 1;
+        ET0 = 1;
+        TR1 = 1;
+        ET1 = 1;
+        EA = 1; // 允许总中断
+    }
 
-    LCD1602_initialize(); // Initialize the LCD1602.
-    LCD1602_display(0, 2, "SIMPLE CLOCK");
-    delay(200); // 等待200ms
-    LCD1602_clear();
+    { // 初始化LCD1602
+        LCD1602_initialize(); // Initialize the LCD1602.
+        LCD1602_display(0, 2, "SIMPLE CLOCK");
+        delay(200); // 等待200ms
+        LCD1602_clear();
+    }
 
     while (1) {
-        if (!setting) {
-            // 非设置模式，正常
-            sprintf(line1, "%02d%c%02d%c%02d   %c", hour, separator, minute, separator, second, (alarm_enabled ? 'A' : 'X'));
-            LCD1602_display(0, 4, line1);
+        read_keys(); // 读取按键输入
+
+        switch (mode) {
+        case TIME_SETTING:
+            break;
+        case ALARM_SETTING:
+            break;
+        default:
+            sprintf(line1, "    %02d%c%02d%c%02d   %c", hour, separator, minute, separator, second, (alarm_enabled ? 'A' : 'X'));
+
+            if (pressed(0, 1)) {
+                alarm = 0; // 按下按键0,1，清除闹钟
+            } else if (pressed(0, 0)) {
+                // 进入设置模式
+
+            }
+            break;
         }
 
-        input = keypad4_transpose_read(pad_read, pad_write);
+        LCD1602_display(0, 0, line1);
+        LCD1602_display(0, 0, line2);
     }
 
 }
@@ -104,16 +119,32 @@ void counter1() interrupt 3  {
 
     separator = (separator == ':') ? ' ' : ':';
 
-    second += 1; // 秒加1
-    if (second < 60) return; // 秒未满60，直接返回
+    second++; // 秒加1
+    if (second >= 60) {
+        second = 0; // 秒归零
+        minute++; // 分加1
+        if (minute >= 60) {
+            minute = 0; // 分归零
+            hour++; // 时加1
+            if (hour >= 24) {
+                hour = 0; // 时归零
+            }
+        }
+    }
 
-    second = 0; // 秒清零
-    minute += 1; // 分加1
-    if (minute < 60) return; // 分未满60，直接返回
+    // 检查闹钟
+    if (alarm_enabled && hour == alarm_hour && minute == alarm_minute && second == alarm_second) {
+        alarm = 200; // 设置闹钟计数为200次
+    }
+}
 
-    minute = 0; // 分清零
-    hour += 1; // 时加1
 
-    if (hour < 24) return; // 时未满24，直接返回
-    hour = 0; // 时清零
+
+uchar pad_read() { return P3; }
+
+void pad_write(uchar val) { P3 = val; }
+
+uint16 read_keys() {
+    input = keypad4_transpose_read(pad_read, pad_write);
+    return input;
 }
