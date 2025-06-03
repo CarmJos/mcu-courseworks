@@ -391,6 +391,16 @@
               <FileType>2</FileType>
               <FilePath>..\..\lib\STARTUP.A51</FilePath>
             </File>
+            <File>
+              <FileName>hex_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\hex_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>hex_display.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\lib\hex_display.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
