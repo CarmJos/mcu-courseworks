@@ -56,33 +56,11 @@ void LCD1602_initialize() {
 void LCD1602_clear() {
     LCD1602_execute(0x01);
 }
-
-void LCD1602_scroll(const RollState state) {
-    switch (state) {
-    case LEFT:
-        LCD1602_execute(0x18);
-        break;
-    case RIGHT:
-        LCD1602_execute(0x1C);
-        break;
-    default:
-        LCD1602_execute(0x06);
-        break;
-    }
-}
-
 void LCD1602_display(uint8 y, uint8 x, uint8* str) {
     LCD1602_cursor(x, y);
     while (*str != '\0') {
         LCD1602_write(*str++);
-        delay(20);
+        _nop_();
+        // delay(1);
     }
-}
-
-void LCD1602_mode(bool display, bool cursor, bool blink) {
-    uint8 mode = 0x08; // Default mode
-    if (display) mode |= 0x04;
-    if (cursor) mode |= 0x02;
-    if (blink) mode |= 0x01;
-    LCD1602_execute(mode);
 }
