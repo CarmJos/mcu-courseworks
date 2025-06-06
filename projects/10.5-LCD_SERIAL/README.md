@@ -64,5 +64,9 @@ graph LR
 
 通过STC-ISP 烧录程序进入两台单片机后，测试功能一切正常，按钮正常操作，发送功能正常显示。
 
+![receiver](receiver.png)
+
+![sender](sender.png)
+
 
 ## 小结

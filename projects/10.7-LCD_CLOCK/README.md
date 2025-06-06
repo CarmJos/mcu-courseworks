@@ -55,3 +55,9 @@ graph TD
 ## 调试过程
 
 调试时，出现char类型强转int失败的问题。将时间类型改为 int 后一切正常。
+
+![](works1.png)
+
+![](clock-settings.png)
+
+![](time-settings.png)
