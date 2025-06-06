@@ -23,12 +23,12 @@ static int count = 59; // 秒计数
 void write(int val) {
     NUMS[7] = count % 10; // 个位
     NUMS[6] = (count / 10) % 10; // 十位
-    NUMS[5] = (count / 100) % 10; // 百位
-    NUMS[4] = (count / 1000) % 10; // 千位
-    NUMS[3] = (count / 10000) % 10; // 万位
-    NUMS[2] = (count / 100000) % 10; // 十万位
-    NUMS[1] = (count / 1000000) % 10; // 百万位
-    NUMS[0] = (count / 10000000) % 10; // 千万位
+    NUMS[5] = 99; // 百位
+    NUMS[4] = 99; // 千位
+    NUMS[3] = 99; // 万位
+    NUMS[2] = 99; // 十万位
+    NUMS[1] = 99; // 百万位
+    NUMS[0] = 99; // 千万位
 }
 
 void display(uchar* val) {
@@ -84,7 +84,7 @@ int main() {
         }
         if (input & 0x04) { // 按下清零
             pause = TRUE; // 暂停
-            count = 0; // 重置计数
+            count = 59; // 重置计数
         }
     }
 
@@ -97,8 +97,8 @@ void counter1() interrupt 3  {
     v++; // 每次中断count加1
     if (v >= 4000) {
         v = 0; // 清零计数器
-        if (!pause) {
-            count++;
+        if (!pause && count > 0) {
+            count--;
         }
     }
 }

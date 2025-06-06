@@ -12,8 +12,8 @@ bool state = 0; // 0 = 学号， 1 = 生日
 static uchar SCHOOL_NUMS[8] = { 0,0,0,0,0,0,0,0 };
 static uchar BIRTH_DAY[8] = { 0,0,0,0,0,0,0,0 };
 static uchar BIT_CODES[8] = {
-   0xFE,   0xFD,  0xFB,  0xF7,
-   0xEF,  0xDF,  0xBF,   0x7F
+   0xFE,  0xFD,  0xFB,  0xF7,
+   0xEF,  0xDF,  0xBF,  0x7F
 };
 
 void display(uchar* val) {
